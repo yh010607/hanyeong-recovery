@@ -1,5 +1,7 @@
 # 한영키 오입력 복원 프로그램
 
+한영키를 잘못 누른 채 입력한 글자를 지우고 다시 쓰지 않도록, 선택한 글자를 `Ctrl+Q`로 변환하는 Windows 프로그램이다.
+
 ## 실행 환경과 파일
 
 Windows 11 64비트에서 확인했다. `HanYeongRecovery.zip`을 한 폴더에 압축 해제하고, 폴더 구조를 유지한 채 `HanYeongRecovery.exe`를 실행한다. `runtime`이 포함되어 있어 EXE 실행에 Java를 따로 설치할 필요는 없다. `HanYeongRecovery-Windows.jar`를 따로 실행하려면 Java 25가 필요하다.
@@ -27,9 +29,19 @@ java --enable-native-access=ALL-UNNAMED -jar HanYeongRecovery-Windows.jar
 - `Ctrl+Q`는 Excel의 빠른 분석 기능 및 VS Code의 기본 기능과 충돌한다. 프로그램이 실행 중이면 이 단축키는 변환 요청으로 처리된다.
 - 프로그램이 이미 실행 중이거나 다른 프로그램이 `Ctrl+Q`를 전역 단축키로 등록했다면 `이미 실행 중이거나 Ctrl+Q를 다른 프로그램이 사용 중입니다.`라는 안내가 나온다.
 
-## 시험 범위
+## 사용 범위 및 예시
 
-수정된 EXE에서 메모장, Excel 셀 편집, VS Code, Word, PowerPoint의 선택한 `gksrmf`가 `한글`로 변환되는 것을 개발 지원 도구의 자동 입력으로 확인했다. Excel 셀 편집에서는 `한글`→`gksrmf`도 재시험했다. Chrome의 Google 검색창에서는 작성자 김연호가 수정 EXE로 `한글` ↔ `gksrmf` 양방향 변환을 확인했다. 다른 네 앱의 반대 방향은 앞선 JAR에서 작성자가 확인했으며, 수정 EXE에서는 다시 시험하지 않았다. 변환 엔진의 개발용 검사 20건은 모두 통과했다.
+글자를 선택하고 붙여넣을 수 있는 입력 화면에서 사용한다. 다음은 사용한 화면과 선택 방법이다.
+
+| 프로그램 | 사용 예시 |
+| --- | --- |
+| 메모장 | 잘못 입력한 `gksrmf`를 선택하고 `Ctrl+Q`를 눌러 `한글`로 바꾼다. |
+| Excel | `F2`로 셀 편집을 시작한 뒤, 셀 안에서 바꿀 글자만 선택한다. |
+| VS Code | 주석이나 문장에서 잘못 입력한 부분만 선택한다. |
+| Word·PowerPoint | 문서나 슬라이드의 텍스트를 선택해 바꾼다. Word에서는 문단 기호를 선택하지 않는다. |
+| Chrome | Google 검색창에 입력한 글자를 선택해 바꾼다. |
+
+`한글`을 선택해 같은 단축키를 누르면 `gksrmf`로도 변환할 수 있다. 프로그램별 주의 사항은 위의 「지원 범위와 제한」을 참고한다.
 
 ## 소스 코드 구성
 
@@ -53,4 +65,4 @@ Copy-Item HanYeongRecovery-Windows.jar input
 jpackage --type app-image --name HanYeongRecovery --input input --main-jar HanYeongRecovery-Windows.jar --java-options "--enable-native-access=ALL-UNNAMED"
 ```
 
-검사가 성공하면 `변환 검사 20건 통과`가 표시된다. `jpackage` 명령은 실행 파일과 Java 런타임을 담은 `HanYeongRecovery` 폴더를 만든다. Java 소스 세 파일을 GitHub 저장소의 최상위에 올리면 된다.
+검사가 성공하면 `변환 검사 20건 통과`가 표시된다. `jpackage` 명령은 실행 파일과 Java 런타임을 담은 `HanYeongRecovery` 폴더를 만든다.
