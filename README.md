@@ -4,7 +4,7 @@
 
 ## 실행 환경과 파일
 
-이 GitHub 저장소에는 소스 코드와 빌드 방법이 들어 있다. 실행 파일은 저장소에 포함되어 있지 않다. Windows 11 64비트에서 확인했으며, 별도로 받은 `HanYeongRecovery.zip`이 있다면 한 폴더에 압축 해제하고 폴더 구조를 유지한 채 `HanYeongRecovery.exe`를 실행한다. 배포 폴더에 `runtime`이 포함되어 있어 EXE 실행에 Java를 따로 설치할 필요는 없다. 소스에서 직접 만드는 방법은 아래 「소스에서 빌드·검사」에 적었다. `HanYeongRecovery-Windows.jar`를 따로 실행하려면 Java 25가 필요하다.
+이 GitHub 저장소에는 소스 코드와 빌드 방법이 들어 있다. 실행 파일은 저장소에 포함되어 있지 않다. Windows 11 64비트에서 확인했으며, 별도로 받은 `HanYeongRecovery.zip`이 있다면 한 폴더에 압축 해제하고 폴더 구조를 유지한 채 `HanYeongRecovery.exe`를 실행한다. 배포 폴더에 `runtime`이 포함되어 있어 EXE 실행에 Java를 따로 설치할 필요는 없다. 소스에서 직접 만드는 방법은 아래 「소스에서 빌드·검사」에 적었다. 빌드로 만든 `HanYeongRecovery-Windows.jar`를 따로 실행하려면 Java 25가 필요하다.
 
 ```powershell
 java --enable-native-access=ALL-UNNAMED -jar HanYeongRecovery-Windows.jar
