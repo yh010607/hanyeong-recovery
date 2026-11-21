@@ -1,0 +1,7 @@
+# 빌드 결과와 실행 중 생성되는 파일은 소스 저장소에서 제외한다.
+*.class
+*.jar
+build/
+test-build/
+input/
+HanYeongRecovery/
