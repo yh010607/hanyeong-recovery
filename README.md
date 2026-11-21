@@ -4,7 +4,7 @@
 
 ## 실행 환경과 파일
 
-Windows 11 64비트에서 확인했다. `HanYeongRecovery.zip`을 한 폴더에 압축 해제하고, 폴더 구조를 유지한 채 `HanYeongRecovery.exe`를 실행한다. `runtime`이 포함되어 있어 EXE 실행에 Java를 따로 설치할 필요는 없다. `HanYeongRecovery-Windows.jar`를 따로 실행하려면 Java 25가 필요하다.
+이 GitHub 저장소에는 소스 코드와 빌드 방법이 들어 있다. 실행 파일은 저장소에 포함되어 있지 않다. Windows 11 64비트에서 확인했으며, 별도로 받은 `HanYeongRecovery.zip`이 있다면 한 폴더에 압축 해제하고 폴더 구조를 유지한 채 `HanYeongRecovery.exe`를 실행한다. 배포 폴더에 `runtime`이 포함되어 있어 EXE 실행에 Java를 따로 설치할 필요는 없다. 소스에서 직접 만드는 방법은 아래 「소스에서 빌드·검사」에 적었다. `HanYeongRecovery-Windows.jar`를 따로 실행하려면 Java 25가 필요하다.
 
 ```powershell
 java --enable-native-access=ALL-UNNAMED -jar HanYeongRecovery-Windows.jar
@@ -24,7 +24,7 @@ java --enable-native-access=ALL-UNNAMED -jar HanYeongRecovery-Windows.jar
 - Excel에서 셀만 선택하면 복사한 글자 끝에 줄바꿈이 붙어 변환이 거절된다. `F2`로 셀 편집을 시작한 뒤 바꿀 글자만 선택한다.
 - Word에서는 문단 기호까지 선택하면 변환 후 다음 문단과 합쳐질 수 있다. 문단 기호를 제외하고 바꿀 글자만 선택한다. 다른 앱에서도 선택 영역은 반드시 확인한다.
 - 한글→영문 변환은 원래 입력의 대소문자를 추정하지 못한다. 같은 자모로 입력된 키는 기본 영문 키로 복원하고, 쌍자음처럼 Shift로 다른 자모가 된 키는 대문자로 대응한다.
-- 복사에 실패하면 이전 클립보드를 가능한 범위에서 되돌린다. 변환이 성공하면 클립보드에 변환 결과가 남는다. 모든 서식의 보존은 보장하지 않는다.
+- 변환을 취소하거나 처리 중 오류가 나면 이전 클립보드를 가능한 범위에서 되돌린다. 변환이 성공하면 클립보드에 변환 결과가 남는다. 모든 서식의 보존은 보장하지 않는다.
 - 읽기 전용 PDF 본문처럼 붙여넣을 수 없는 화면에서는 사용할 수 없다.
 - `Ctrl+Q`는 Excel의 빠른 분석 기능 및 VS Code의 기본 기능과 충돌한다. 프로그램이 실행 중이면 이 단축키는 변환 요청으로 처리된다.
 - 프로그램이 이미 실행 중이거나 다른 프로그램이 `Ctrl+Q`를 전역 단축키로 등록했다면 `이미 실행 중이거나 Ctrl+Q를 다른 프로그램이 사용 중입니다.`라는 안내가 나온다.

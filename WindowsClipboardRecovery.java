@@ -100,7 +100,7 @@ public class WindowsClipboardRecovery {
     public static void main(String[] args) {
         // Windows와 트레이를 사용할 수 없는 환경에서는 실행을 시작하지 않는다.
         if (!System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win")) {
-            System.err.println("이 시험 프로그램은 Windows에서만 실행할 수 있습니다.");
+            System.err.println("한영키 오입력 복원 프로그램은 Windows에서만 실행할 수 있습니다.");
             return;
         }
         if (ValueLayout.ADDRESS.byteSize() != 8) {
@@ -136,7 +136,7 @@ public class WindowsClipboardRecovery {
                 return;
             }
 
-            System.out.println("한영키 오입력 복원 시험 프로그램 실행 중");
+            System.out.println("한영키 오입력 복원 프로그램 실행 중");
             System.out.println("편집 가능한 글자를 선택하고 Ctrl+Q를 누르세요.");
             TrayIcon trayIcon = null;
             try (Arena arena = Arena.ofConfined()) {
@@ -222,7 +222,7 @@ public class WindowsClipboardRecovery {
             Robot robot = new Robot();
             robot.setAutoDelay(20);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            // 2. 복사 실패 시 되돌릴 수 있도록 기존 클립보드 내용을 보관한다.
+            // 2. 변환이 취소되거나 실패하면 되돌릴 수 있도록 기존 클립보드 내용을 보관한다.
             Transferable previous = clipboard.getContents(null);
             if (previous != null && previous.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                 // 기존 글자는 클립보드가 바뀐 뒤에도 복원할 수 있도록 별도로 보관한다.
@@ -232,46 +232,48 @@ public class WindowsClipboardRecovery {
 
             // 3. 임시 표식을 넣은 뒤 Ctrl+C를 보낸다. 표식이 바뀌면 새 복사가 끝난 것이다.
             String marker = "HanYeongRecovery-" + System.nanoTime();
-            setClipboardContents(clipboard, new StringSelection(marker));
-            String original = null;
+            boolean pasted = false;
             try {
+                setClipboardContents(clipboard, new StringSelection(marker));
                 sendShortcut(robot, KeyEvent.VK_C);
-                original = waitForCopiedText(clipboard, marker);
+                String original = waitForCopiedText(clipboard, marker);
+
+                if (original == null || !isOriginalWindow(originalWindow)) {
+                    System.out.println("선택한 글자를 복사하지 못했거나 활성 창이 바뀌었습니다.");
+                    return;
+                }
+
+                // 4. 선택하지 않은 VS Code 줄이나 Excel 셀은 끝에 줄바꿈이 붙어 복사될 수 있다.
+                // 이를 붙여넣으면 예상 밖의 줄이 추가될 수 있으므로 변환을 거절한다.
+                if (original.endsWith("\n") || original.endsWith("\r")) {
+                    System.out.println("줄바꿈으로 끝나는 복사 내용은 변환하지 않습니다. 글자만 선택하세요.");
+                    return;
+                }
+
+                // 5. 변환 클래스가 문자 종류를 판별하고 두벌식 규칙으로 변환한다.
+                String converted;
+                try {
+                    converted = KoreanEnglishRecovery.convert(original);
+                } catch (IllegalArgumentException invalidInput) {
+                    System.out.println("변환하지 않았습니다: " + invalidInput.getMessage());
+                    return;
+                }
+
+                if (!isOriginalWindow(originalWindow)) {
+                    System.out.println("활성 창이 바뀌어 붙여넣기를 취소했습니다.");
+                    return;
+                }
+
+                // 6. 시작한 창이 그대로 활성화돼 있을 때만 결과를 붙여넣는다.
+                setClipboardContents(clipboard, new StringSelection(converted));
+                robot.delay(60);
+                sendShortcut(robot, KeyEvent.VK_V);
+                pasted = true;
+                System.out.println("변환 결과를 붙여넣었습니다.");
             } finally {
-                if (original == null) restoreClipboard(clipboard, previous);
+                // 복사 후 중단된 모든 경로에서 시작 전 클립보드를 되돌린다.
+                if (!pasted) restoreClipboard(clipboard, previous);
             }
-
-            if (original == null || !isOriginalWindow(originalWindow)) {
-                System.out.println("선택한 글자를 복사하지 못했거나 활성 창이 바뀌었습니다.");
-                return;
-            }
-
-            // 4. 선택하지 않은 VS Code 줄이나 Excel 셀은 끝에 줄바꿈이 붙어 복사될 수 있다.
-            // 이를 붙여넣으면 예상 밖의 줄이 추가될 수 있으므로 변환을 거절한다.
-            if (original.endsWith("\n") || original.endsWith("\r")) {
-                System.out.println("줄바꿈으로 끝나는 복사 내용은 변환하지 않습니다. 글자만 선택하세요.");
-                return;
-            }
-
-            // 5. 변환 클래스가 문자 종류를 판별하고 두벌식 규칙으로 변환한다.
-            String converted;
-            try {
-                converted = KoreanEnglishRecovery.convert(original);
-            } catch (IllegalArgumentException invalidInput) {
-                System.out.println("변환하지 않았습니다: " + invalidInput.getMessage());
-                return;
-            }
-
-            if (!isOriginalWindow(originalWindow)) {
-                System.out.println("활성 창이 바뀌어 붙여넣기를 취소했습니다.");
-                return;
-            }
-
-            // 6. 시작한 창이 그대로 활성화돼 있을 때만 결과를 붙여넣는다.
-            setClipboardContents(clipboard, new StringSelection(converted));
-            robot.delay(60);
-            sendShortcut(robot, KeyEvent.VK_V);
-            System.out.println("변환 결과를 붙여넣었습니다.");
         } catch (IllegalStateException | AWTException error) {
             System.out.println("처리하지 못했습니다: " + error.getMessage());
         } catch (Throwable error) {
@@ -310,7 +312,7 @@ public class WindowsClipboardRecovery {
         throw new IllegalStateException("클립보드에 결과를 저장할 수 없습니다.");
     }
 
-    /** 선택한 글자를 복사하지 못했으면 이전 클립보드 내용을 되돌린다. */
+    /** 변환이 취소되거나 실패하면 이전 클립보드 내용을 되돌린다. */
     private static void restoreClipboard(Clipboard clipboard, Transferable previous) {
         try {
             setClipboardContents(clipboard,
