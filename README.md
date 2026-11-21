@@ -2,9 +2,11 @@
 
 한영키를 바꾸는 것을 잊고 글을 입력했을 때, 잘못 입력한 부분을 지우고 다시 쓰는 대신 선택해서 바로 고치는 Windows 프로그램이다. 선택한 글자가 영문인지 한글인지에 따라 변환 방향을 자동으로 정한다.
 
-## 실행 환경과 파일
+## 다운로드와 실행
 
-이 GitHub 저장소에는 소스 코드와 빌드 방법이 들어 있다. 실행 파일은 저장소에 포함되어 있지 않다. Windows 11 64비트에서 확인했으며, 별도로 받은 `HanYeongRecovery.zip`이 있다면 한 폴더에 압축 해제하고 폴더 구조를 유지한 채 `HanYeongRecovery.exe`를 실행한다. 배포 폴더에 `runtime`이 포함되어 있어 EXE 실행에 Java를 따로 설치할 필요는 없다. 소스에서 직접 만드는 방법은 아래 「소스에서 빌드·검사」에 적었다. 빌드로 만든 `HanYeongRecovery-Windows.jar`를 따로 실행하려면 Java 25가 필요하다.
+Windows 실행 파일은 [Releases](https://github.com/yh010607/hanyeong-recovery/releases/latest)에서 `HanYeongRecovery.zip`을 내려받는다. 압축을 풀고 `HanYeongRecovery` 폴더 안의 `HanYeongRecovery.exe`를 실행한다. `app`과 `runtime` 폴더를 함께 두어야 하며, Java를 따로 설치할 필요는 없다. Windows 11 64비트에서 확인했다.
+
+이 저장소에는 소스 코드와 빌드 방법이 있다. 소스에서 직접 만드는 방법은 아래 「소스에서 빌드·검사」를 참고한다. 빌드로 만든 `HanYeongRecovery-Windows.jar`를 따로 실행하려면 Java 25가 필요하다.
 
 ```powershell
 java --enable-native-access=ALL-UNNAMED -jar HanYeongRecovery-Windows.jar
