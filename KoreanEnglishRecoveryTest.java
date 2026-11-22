@@ -14,8 +14,8 @@ public class KoreanEnglishRecoveryTest {
         check("ㅗ디ㅣㅐ", "hello");
 
         // Shift로 입력한 쌍자음과 겹받침
-        check("rRk", "ㄱ까");
-        check("ㄱ까", "rRk");
+        check("gksRmf", "한끌");
+        check("한끌", "gksRmf");
         check("R", "ㄲ");
         check("ㄲ", "R");
         check("rkqt", "값");
