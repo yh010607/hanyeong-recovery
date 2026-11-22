@@ -6,7 +6,7 @@
 
 Windows 실행 파일은 [Releases](https://github.com/yh010607/hanyeong-recovery/releases/latest)에서 `HanYeongRecovery.zip`을 내려받는다. 압축을 풀고 `HanYeongRecovery` 폴더 안의 `HanYeongRecovery.exe`를 실행한다. `app`과 `runtime` 폴더를 함께 두어야 하며, Java를 따로 설치할 필요는 없다. Windows 11 64비트에서 확인했다.
 
-이 저장소에는 소스 코드와 빌드 방법이 있다. 소스에서 직접 만드는 방법은 아래 「소스에서 빌드·검사」를 참고한다. 빌드로 만든 `HanYeongRecovery-Windows.jar`를 따로 실행하려면 Java 25가 필요하다.
+이 저장소에는 소스 코드와 빌드 방법이 있다. 소스에서 직접 만드는 방법은 아래 「소스에서 빌드」를 참고한다. 빌드로 만든 `HanYeongRecovery-Windows.jar`를 따로 실행하려면 Java 25가 필요하다.
 
 ```powershell
 java --enable-native-access=ALL-UNNAMED -jar HanYeongRecovery-Windows.jar
@@ -53,20 +53,17 @@ java --enable-native-access=ALL-UNNAMED -jar HanYeongRecovery-Windows.jar
 | --- | --- |
 | `KoreanEnglishRecovery.java` | 두벌식 키와 한글 자모의 대응, 한글 음절 조합·분해 |
 | `WindowsClipboardRecovery.java` | 전역 단축키, 선택 영역 복사·교체, 트레이 아이콘 |
-| `KoreanEnglishRecoveryTest.java` | 변환 결과와 거절 입력 20건 검사. 배포 JAR에서는 제외 |
 
-## 소스에서 빌드·검사
+## 소스에서 빌드
 
 Windows PowerShell과 Java 25 JDK에서 이 폴더를 연 뒤 실행한다.
 
 ```powershell
-New-Item -ItemType Directory -Force build,test-build,input | Out-Null
+New-Item -ItemType Directory -Force build,input | Out-Null
 javac -encoding UTF-8 -d build KoreanEnglishRecovery.java WindowsClipboardRecovery.java
-javac -encoding UTF-8 -cp build -d test-build KoreanEnglishRecoveryTest.java
-java -cp "build;test-build" KoreanEnglishRecoveryTest
 jar --create --file HanYeongRecovery-Windows.jar --main-class WindowsClipboardRecovery -C build .
 Copy-Item HanYeongRecovery-Windows.jar input
 jpackage --type app-image --name HanYeongRecovery --input input --main-jar HanYeongRecovery-Windows.jar --java-options "--enable-native-access=ALL-UNNAMED"
 ```
 
-검사가 성공하면 `변환 검사 20건 통과`가 표시된다. `jpackage` 명령은 실행 파일과 Java 런타임을 담은 `HanYeongRecovery` 폴더를 만든다.
+`jpackage` 명령은 실행 파일과 Java 런타임을 담은 `HanYeongRecovery` 폴더를 만든다.
