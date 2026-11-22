@@ -4,7 +4,7 @@
 
 ## 다운로드와 실행
 
-Windows 실행 파일은 [Releases](https://github.com/yh010607/hanyeong-recovery/releases/latest)에서 `HanYeongRecovery.zip`을 내려받는다. 압축을 풀고 `HanYeongRecovery` 폴더 안의 `HanYeongRecovery.exe`를 실행한다. `app`과 `runtime` 폴더를 함께 두어야 하며, Java를 따로 설치할 필요는 없다. Windows 11 64비트에서 확인했다.
+Windows 실행 파일은 [Releases](https://github.com/yeon00007/hanyeong-recovery/releases/latest)에서 `HanYeongRecovery.zip`을 내려받는다. 압축을 풀고 `HanYeongRecovery` 폴더 안의 `HanYeongRecovery.exe`를 실행한다. `app`과 `runtime` 폴더를 함께 두어야 하며, Java를 따로 설치할 필요는 없다. Windows 11 64비트에서 확인했다.
 
 이 저장소에는 소스 코드와 빌드 방법이 있다. 소스에서 직접 만드는 방법은 아래 「소스에서 빌드」를 참고한다. 빌드로 만든 `HanYeongRecovery-Windows.jar`를 따로 실행하려면 Java 25가 필요하다.
 
